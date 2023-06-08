@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, KeyboardEvent, ChangeEvent} from 'react';
 import {FilterValueType} from "./App";
 
 
@@ -24,6 +24,20 @@ const Todolist = (props: TodolistPropsType) => {
         setTitle('')
     }
 
+    const onChangeHandler = (e:ChangeEvent<HTMLInputElement>)=> {
+        setTitle(e.currentTarget.value)
+    }
+
+    const onKeyPressHandler = (e:KeyboardEvent<HTMLInputElement>)=>{
+        if(e.key==='Enter'){
+            addTaskHandler()
+        }
+    }
+
+    const changeFilterHandler = (filter:FilterValueType) =>{
+        props.changeFilter(filter)
+    }
+
     return (
 
         <div>
@@ -32,27 +46,23 @@ const Todolist = (props: TodolistPropsType) => {
                 <input
 
                     value={title}
-                    onChange={(e) => setTitle(e.currentTarget.value)}
-                    onKeyPress={(e)=>{
-                        console.log(e.key)
-                        if(e.key==='Enter'){
-                            addTaskHandler()
-                        }
-                    }
-
-                    }
+                    onChange={onChangeHandler}
+                    onKeyPress={onKeyPressHandler}
                 />
                 <button onClick={addTaskHandler}>+
                 </button>
             </div>
             <ul>
                 {props.tasks.map((el: TaskPropsType) => {
+
+                    const removeTask = () =>{
+                        props.removeTask(el.id)
+                    }
+
                         return (
                             <>
                                 <li key={el.id}>
-                                    <button onClick={() => {
-                                        props.removeTask(el.id)
-                                    }}>х
+                                    <button onClick={removeTask}>х
                                     </button>
                                     <input type="checkbox" checked={el.isDone}/>
                                     <span>{el.title}</span></li>
@@ -66,9 +76,9 @@ const Todolist = (props: TodolistPropsType) => {
                 {/*<li><input type="checkbox" checked={false}/> <span>React</span></li>*/}
             </ul>
             <div>
-                <button onClick={() => props.changeFilter('All')}>All</button>
-                <button onClick={() => props.changeFilter('Active')}>Active</button>
-                <button onClick={() => props.changeFilter('Completed')}>Completed</button>
+                <button onClick={() => changeFilterHandler('All')}>All</button>
+                <button onClick={() => changeFilterHandler('Active')}>Active</button>
+                <button onClick={() => changeFilterHandler('Completed')}>Completed</button>
             </div>
         </div>
     );
