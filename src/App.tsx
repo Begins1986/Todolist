@@ -13,7 +13,7 @@ function App() {
         {id: v1(), title: "ReactJS", isDone: false}
     ])
 
-    let [filter, setFilter]=useState('All')
+    let [filter, setFilter]=useState<FilterValueType>('All')
 
     const removeTask=(taskId: string)=>{
         setTask(tasks.filter(t=>t.id!==taskId))
@@ -50,6 +50,7 @@ function App() {
                 changeFilter={changeFilter}
                 addTask={addTask}
                 changeStatus={changeStatus}
+                filter={filter}
             />
         </div>
     );
